@@ -6,32 +6,34 @@
 </HeadContent>
 
 <main>
-    <header class="site-header">
-        <a class="wordmark" href="#top" aria-label="socco, startsida">socco</a>
+    <MudAppBar Class="site-header" Elevation="0" Color="Color.Transparent">
+        <MudLink Class="wordmark" Href="#top" Underline="Underline.None">socco</MudLink>
+        <MudSpacer />
         <nav aria-label="Huvudmeny">
-            <a href="#funktioner">Funktioner</a>
-            <a href="#sa-fungerar-det">Så fungerar det</a>
-            <a href="#om">Om socco</a>
+            <MudLink Href="#funktioner" Underline="Underline.None">Funktioner</MudLink>
+            <MudLink Href="#sa-fungerar-det" Underline="Underline.None">Så fungerar det</MudLink>
+            <MudLink Href="#om" Underline="Underline.None">Om socco</MudLink>
         </nav>
-        <a class="header-cta" href="#kontakt">Prova socco <span aria-hidden="true">↗</span></a>
-    </header>
+        <MudSpacer />
+        <MudButton Class="header-cta" Href="#kontakt" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.NorthEast">Prova socco</MudButton>
+    </MudAppBar>
 
     <section class="hero" id="top">
         <div class="hero-copy">
             <p class="eyebrow"><span class="eyebrow-dot"></span>En plats för gemensam riktning</p>
             <h1>Samarbete som<br />faktiskt känns <em>enkelt.</em></h1>
-            <p class="hero-lead">Samla människor, idéer och nästa steg på en plats – så att fler kan bidra och mindre faller mellan stolarna.</p>
-            <div class="hero-actions">
-                <a class="button button-primary" href="#kontakt">Kom igång <span aria-hidden="true">↗</span></a>
-                <a class="text-link" href="#sa-fungerar-det">Se hur det fungerar <span aria-hidden="true">↓</span></a>
-            </div>
+            <MudText Class="hero-lead">Samla människor, idéer och nästa steg på en plats – så att fler kan bidra och mindre faller mellan stolarna.</MudText>
+            <MudStack Class="hero-actions" Row="true" AlignItems="AlignItems.Center">
+                <MudButton Class="button button-primary" Href="#kontakt" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.NorthEast">Kom igång</MudButton>
+                <MudButton Class="text-link" Href="#sa-fungerar-det" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.South">Se hur det fungerar</MudButton>
+            </MudStack>
             <div class="trust-row" aria-label="Fördelar"><span>Ingen installation</span><span>Kom igång på minuter</span></div>
         </div>
         <div class="hero-visual" aria-label="Människor som samarbetar">
             <div class="visual-blob"></div>
             <img src="socco-collaboration.png" alt="Illustration av en grupp människor som samlas kring en gemensam plan" />
-            <div class="floating-note note-one"><span class="mini-icon">✓</span><div><strong>Nästa steg</strong><small>Alla vet vad som händer</small></div></div>
-            <div class="floating-note note-two"><span class="avatar-stack" aria-hidden="true"><i></i><i></i><i></i></span><div><strong>5 personer</strong><small>Bidrar just nu</small></div></div>
+            <MudPaper Class="floating-note note-one" Elevation="8"><span class="mini-icon">✓</span><div><strong>Nästa steg</strong><small>Alla vet vad som händer</small></div></MudPaper>
+            <MudPaper Class="floating-note note-two" Elevation="8"><span class="avatar-stack" aria-hidden="true"><i></i><i></i><i></i></span><div><strong>5 personer</strong><small>Bidrar just nu</small></div></MudPaper>
         </div>
     </section>
 
@@ -44,16 +46,19 @@
             <p class="eyebrow"><span class="eyebrow-dot"></span>Byggt för verkligt samarbete</p>
             <h2>När alla ser helheten blir det lättare att gå framåt.</h2>
         </div>
-        <div class="feature-grid">
+        <MudGrid Spacing="3">
             @foreach (var feature in Features)
             {
-                <article class="feature-card @feature.Tone">
-                    <span class="feature-number">@feature.Number</span>
-                    <div class="feature-symbol" aria-hidden="true">@feature.Symbol</div>
-                    <h3>@feature.Title</h3><p>@feature.Text</p>
-                </article>
+                <MudItem xs="12" md="4">
+                    <MudPaper Class="@($"feature-card {feature.Tone}")" Elevation="0">
+                        <MudText Class="feature-number">@feature.Number</MudText>
+                        <div class="feature-symbol" aria-hidden="true">@feature.Symbol</div>
+                        <MudText Typo="Typo.h5" GutterBottom="true">@feature.Title</MudText>
+                        <MudText>@feature.Text</MudText>
+                    </MudPaper>
+                </MudItem>
             }
-        </div>
+        </MudGrid>
     </section>
 
     <section class="steps-section" id="sa-fungerar-det">
@@ -61,26 +66,32 @@
             <p class="eyebrow light"><span class="eyebrow-dot"></span>Så fungerar det</p>
             <h2>En lugnare väg från tanke till handling.</h2>
             <p>Socco ger gruppen ett gemensamt rum där det är lätt att förstå sammanhanget och ta ansvar för nästa steg.</p>
-            <a class="button button-peach" href="#kontakt">Upptäck socco <span aria-hidden="true">↗</span></a>
+            <MudButton Class="button button-peach" Href="#kontakt" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.NorthEast">Upptäck socco</MudButton>
         </div>
-        <ol class="steps-list">
-            <li><span>1</span><div><h3>Bjud in gruppen</h3><p>Skapa en trygg gemensam plats för teamet eller nätverket.</p></div></li>
-            <li><span>2</span><div><h3>Samla det som är viktigt</h3><p>Fånga perspektiv, frågor, beslut och uppgifter i sitt sammanhang.</p></div></li>
-            <li><span>3</span><div><h3>Gå framåt tillsammans</h3><p>Följ nästa steg utan att tappa människorna eller helheten.</p></div></li>
-        </ol>
+        <MudList T="Step" Class="steps-list">
+            @foreach (var step in Steps)
+            {
+                <MudListItem Value="@step">
+                    <div class="step-row">
+                        <MudAvatar Class="step-number">@step.Number</MudAvatar>
+                        <div><MudText Typo="Typo.h6">@step.Title</MudText><MudText>@step.Text</MudText></div>
+                    </div>
+                </MudListItem>
+            }
+        </MudList>
     </section>
 
     <section class="about-section" id="om">
         <div class="about-mark" aria-hidden="true"><span>s</span><b>✦</b></div>
-        <div><p class="eyebrow"><span class="eyebrow-dot"></span>Om socco</p><h2>Teknik ska ge plats åt människor – inte stå i vägen.</h2><p>Därför är socco byggt kring tydlighet, delaktighet och omtanke. En samarbetsyta som känns mänsklig, även när arbetet är komplext.</p></div>
+        <div><p class="eyebrow"><span class="eyebrow-dot"></span>Om socco</p><h2>Teknik ska ge plats åt människor – inte stå i vägen.</h2><MudText>Därför är socco byggt kring tydlighet, delaktighet och omtanke. En samarbetsyta som känns mänsklig, även när arbetet är komplext.</MudText></div>
     </section>
 
     <section class="final-cta" id="kontakt">
         <p class="eyebrow light"><span class="eyebrow-dot"></span>Redo när ni är</p>
-        <h2>Skapa mer tillsammans.</h2><p>Börja samla människor, idéer och nästa steg i socco.</p>
-        <a class="button button-peach" href="mailto:hej@socco.se">Kontakta oss <span aria-hidden="true">↗</span></a>
+        <h2>Skapa mer tillsammans.</h2><MudText>Börja samla människor, idéer och nästa steg i socco.</MudText>
+        <MudButton Class="button button-peach" Href="mailto:hej@socco.se" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.NorthEast">Kontakta oss</MudButton>
     </section>
-    <footer><a class="wordmark" href="#top">socco</a><p>Socialt samarbete, gjort enklare.</p><p>© 2026 socco</p></footer>
+    <footer><MudLink Class="wordmark" Href="#top" Underline="Underline.None">socco</MudLink><p>Socialt samarbete, gjort enklare.</p><p>© 2026 socco</p></footer>
 </main>
 
 @code {
@@ -91,5 +102,13 @@
         new("03", "✦", "Få fler att bidra", "En varm och enkel arbetsyta gör det lättare för varje person att komma till tals.", "coral")
     ];
 
+    private static readonly Step[] Steps =
+    [
+        new("1", "Bjud in gruppen", "Skapa en trygg gemensam plats för teamet eller nätverket."),
+        new("2", "Samla det som är viktigt", "Fånga perspektiv, frågor, beslut och uppgifter i sitt sammanhang."),
+        new("3", "Gå framåt tillsammans", "Följ nästa steg utan att tappa människorna eller helheten.")
+    ];
+
     private sealed record Feature(string Number, string Symbol, string Title, string Text, string Tone);
+    private sealed record Step(string Number, string Title, string Text);
 }
