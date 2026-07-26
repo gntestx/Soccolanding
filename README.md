@@ -1,6 +1,12 @@
 # Socco landing page
 
-Svensk landningssida byggd med Blazor WebAssembly och C#.
+Svensk landningssida byggd med Blazor WebAssembly, C# och MudBlazor.
+
+## Teknik
+
+- .NET 9 / Blazor WebAssembly
+- MudBlazor 9.7
+- Responsiv, projektspecifik Socco-design ovanpå MudBlazors komponenter
 
 ## Kör lokalt
 
