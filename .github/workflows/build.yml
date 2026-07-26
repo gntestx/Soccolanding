@@ -1,0 +1,57 @@
+name: Build and deploy Blazor WebAssembly
+
+on:
+  push:
+    branches:
+      - agent/port-socco-to-mudblazor
+  pull_request:
+    branches:
+      - agent/port-socco-to-blazor-webassembly
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - run: dotnet restore SoccoLanding.slnx
+      - run: dotnet build SoccoLanding.slnx --configuration Release --no-restore
+      - run: dotnet publish SoccoLanding/SoccoLanding.csproj --configuration Release --no-build --output publish
+      - name: Prepare GitHub Pages artifact
+        if: github.ref == 'refs/heads/agent/port-socco-to-mudblazor'
+        run: |
+          sed -i 's|<base href="/" />|<base href="/Soccolanding/" />|' publish/wwwroot/index.html
+          cp publish/wwwroot/index.html publish/wwwroot/404.html
+          touch publish/wwwroot/.nojekyll
+      - name: Configure GitHub Pages
+        if: github.ref == 'refs/heads/agent/port-socco-to-mudblazor'
+        uses: actions/configure-pages@v5
+      - name: Upload GitHub Pages artifact
+        if: github.ref == 'refs/heads/agent/port-socco-to-mudblazor'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: publish/wwwroot
+
+  deploy:
+    if: github.ref == 'refs/heads/agent/port-socco-to-mudblazor'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
