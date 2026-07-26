@@ -29,3 +29,61 @@
 .final-cta>.mud-typography{margin:25px auto 32px;color:#c7d6cf}
 footer .mud-link.wordmark{font-size:2rem}
 @media(max-width:960px){.site-header .mud-toolbar{display:flex;width:100%}.site-header nav{display:none}.feature-section .mud-grid{margin:-12px}}
+
+
+/* Pixel-match the original Socco design where MudBlazor supplies component defaults. */
+.site-header nav .mud-link{
+  color:inherit!important;
+  font-family:Arial,Helvetica,sans-serif;
+  letter-spacing:normal;
+}
+.site-header nav .mud-link,.text-link{transition:opacity 180ms ease}
+.site-header nav .mud-link:hover,.text-link:hover{opacity:.58}
+.header-cta.mud-button-root{
+  color:var(--forest)!important;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:.9rem;
+  line-height:normal;
+  letter-spacing:normal;
+}
+.header-cta .mud-icon-root{margin-left:8px}
+.button.mud-button-root{
+  min-height:56px;
+  border-radius:999px;
+  padding:0 28px;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:.95rem;
+  font-weight:800;
+  line-height:normal;
+}
+.button-primary.mud-button-root{background:var(--forest)!important;color:#fff!important}
+.button-peach.mud-button-root{background:var(--peach)!important;color:var(--aubergine)!important}
+.text-link.mud-button-root{
+  min-width:0;
+  padding:0;
+  border-radius:0;
+  color:var(--ink)!important;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:.92rem;
+  font-weight:800;
+  line-height:normal;
+}
+.text-link .mud-icon-root{margin-left:7px;color:var(--coral)}
+.hero::after{
+  position:absolute;right:37%;bottom:31px;width:8px;height:8px;border-radius:50%;
+  background:var(--coral);box-shadow:20px 17px 0 -2px var(--mustard);content:"";
+}
+.visual-blob::before{
+  position:absolute;top:-9%;right:6%;width:34%;height:34%;border-radius:50%;
+  background:var(--lavender);content:"";
+}
+.visual-blob::after{
+  position:absolute;bottom:-2%;left:-7%;width:28%;height:28%;border-radius:50%;
+  background:var(--coral);content:"";
+}
+.visual-orbit{position:absolute;z-index:1;border-radius:50%}
+.orbit-one{top:7%;left:6%;width:58px;height:58px;background:var(--mustard)}
+.orbit-two{right:3%;bottom:7%;width:34px;height:34px;background:var(--coral)}
+.floating-note{border:1px solid #0d4a3b1f}
+.floating-note strong{color:var(--forest);font-size:.78rem}
+.floating-note small{font-size:.64rem}
