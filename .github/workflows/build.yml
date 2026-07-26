@@ -45,7 +45,7 @@ jobs:
           path: publish/wwwroot
 
   deploy:
-    if: github.ref == 'refs/heads/agent/port-socco-to-mudblazor'
+    #if: github.ref == 'refs/heads/agent/port-socco-to-mudblazor'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
