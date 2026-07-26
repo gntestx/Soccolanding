@@ -15,7 +15,10 @@ public static class SoccoTheme
         {
             Primary = "#0d4a3b",
             Secondary = "#f47c5b",
+            SecondaryLighten = "#f3a27e",
             Tertiary = "#241027",
+            Info = "#b69ae8",
+            Warning = "#e8ac3a",
             Background = "#f6f0e2",
             Surface = "#fffaf0",
             TextPrimary = "#172c26",
