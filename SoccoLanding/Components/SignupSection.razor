@@ -136,7 +136,7 @@
 
         await SimulateApiAsync();
         var unavailableNames = new[] { "socco", "demo", "test", "exempel" };
-        if (unavailableNames.Contains(OrganisationName.Trim(), StringComparer.OrdinalIgnoreCase))
+        if (unavailableNames.Any(name => string.Equals(name, OrganisationName.Trim(), StringComparison.OrdinalIgnoreCase)))
         {
             SetError("Namnet verkar redan vara upptaget. Prova ett annat organisationsnamn.");
             return;
