@@ -1,126 +1,190 @@
 @using System.ComponentModel.DataAnnotations
 
-<section class="signup-section" id="signup" aria-labelledby="signup-title">
-    <div class="signup-intro">
-        <p class="eyebrow"><span class="eyebrow-dot"></span>Kom igång med socco</p>
-        <h2 id="signup-title">Skapa er gemensamma plats.</h2>
-        <p>Vi guidar dig genom några korta steg. Formuläret använder simulerade API-anrop och skickar inga riktiga mejl.</p>
-
-        <div class="signup-art" aria-hidden="true">
-            <div class="signup-art-rings"><span></span><span></span><span></span></div>
-            <div class="signup-art-note note-people"><b>✦</b><span>Fler perspektiv</span></div>
-            <div class="signup-art-note note-direction"><b>↗</b><span>Gemensam riktning</span></div>
-            <div class="signup-art-center">s</div>
-        </div>
-    </div>
-
+<section class="signup-section" id="signup" aria-label="Skapa Socco-konto">
     <MudPaper Class="signup-card" Elevation="0">
-        <div class="signup-card-kicker">Steg @CurrentStep av 5</div>
-        <div class="signup-progress" aria-label="Registreringsförlopp">
-            @for (var number = 1; number <= 5; number++)
+        <aside class="@($"signup-rail {StepTones[CurrentStep - 1]}")">
+            <div class="signup-rail-copy">
+                <p class="rail-kicker">Steg @CurrentStep av 5</p>
+                <div class="rail-number" aria-hidden="true">@(CurrentStep.ToString("00"))</div>
+                <h3>@StepTitles[CurrentStep - 1]</h3>
+                <p>@StepDescriptions[CurrentStep - 1]</p>
+            </div>
+            <div class="rail-art" aria-hidden="true">
+                <span></span><span></span><span></span>
+                <b>✦</b>
+            </div>
+        </aside>
+
+        <div class="signup-panel">
+            <div class="signup-panel-header">
+                <div class="signup-card-kicker">Kom igång med socco</div>
+                <span class="signup-time">Tar cirka 2 minuter</span>
+            </div>
+
+            <div class="signup-progress" aria-label="Registreringsförlopp">
+                @for (var number = 1; number <= 5; number++)
+                {
+                    <div class="@($"progress-item {(number < CurrentStep ? "complete" : number == CurrentStep ? "active" : string.Empty)}")" aria-current="@(number == CurrentStep ? "step" : null)">
+                        <span>@(number < CurrentStep ? "✓" : number)</span>
+                        <small>@StepLabels[number - 1]</small>
+                    </div>
+                }
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(StatusMessage))
             {
-                <span class="@(number < CurrentStep ? "complete" : number == CurrentStep ? "active" : null)">
-                    @(number < CurrentStep ? "✓" : number)
-                </span>
+                <MudAlert Severity="@StatusSeverity" Variant="Variant.Outlined" Dense="true" Class="signup-alert">@StatusMessage</MudAlert>
+            }
+
+            @switch (CurrentStep)
+            {
+                case 1:
+                    <div class="signup-step">
+                        <div class="step-heading">
+                            <span class="step-symbol mustard-symbol" aria-hidden="true">◎</span>
+                            <div>
+                                <p class="step-overline">Er gemensamma plats</p>
+                                <MudText Typo="Typo.h4">Vad heter organisationen?</MudText>
+                            </div>
+                        </div>
+                        <MudText Class="step-lead">Namnet blir rubriken på er arbetsyta och behöver vara unikt.</MudText>
+                        <div class="field-block">
+                            <MudTextField Class="signup-field" @bind-Value="OrganisationName" Label="Organisationens namn" Placeholder="Till exempel Studio Norden" Variant="Variant.Outlined" Immediate="true" Disabled="@IsBusy" />
+                            <small>Minst tre tecken. Namnen socco, demo, test och exempel är upptagna i demon.</small>
+                        </div>
+                        <MudButton Class="signup-primary" Variant="Variant.Filled" Disabled="@IsBusy" OnClick="CheckOrganisationAsync" EndIcon="@Icons.Material.Filled.ArrowForward">
+                            @(IsBusy ? "Kontrollerar…" : "Kontrollera och fortsätt")
+                        </MudButton>
+                    </div>
+                    break;
+
+                case 2:
+                    <div class="signup-step">
+                        <div class="step-heading">
+                            <span class="step-symbol lavender-symbol" aria-hidden="true">@@</span>
+                            <div>
+                                <p class="step-overline">@OrganisationName</p>
+                                <MudText Typo="Typo.h4">Vilken e-postadress ska vi använda?</MudText>
+                            </div>
+                        </div>
+                        <MudText Class="step-lead">Vi skickar en bekräftelsekod till adressen och kopplar den till organisationen.</MudText>
+                        <div class="field-block">
+                            <MudTextField Class="signup-field" @bind-Value="Email" Label="E-postadress" Placeholder="namn@organisation.se" InputType="InputType.Email" Variant="Variant.Outlined" Immediate="true" Disabled="@IsBusy" />
+                            <small>Använd den adress du vill administrera kontot med.</small>
+                        </div>
+                        <div class="signup-actions">
+                            <MudButton Class="signup-back" Variant="Variant.Text" OnClick="Back" Disabled="@IsBusy" StartIcon="@Icons.Material.Filled.ArrowBack">Tillbaka</MudButton>
+                            <MudButton Class="signup-primary" Variant="Variant.Filled" Disabled="@IsBusy" OnClick="SendCodeAsync" EndIcon="@Icons.Material.Filled.ArrowForward">
+                                @(IsBusy ? "Skickar…" : "Skicka kod")
+                            </MudButton>
+                        </div>
+                    </div>
+                    break;
+
+                case 3:
+                    <div class="signup-step">
+                        <div class="step-heading">
+                            <span class="step-symbol coral-symbol" aria-hidden="true">✓</span>
+                            <div>
+                                <p class="step-overline">Kod skickad till @Email</p>
+                                <MudText Typo="Typo.h4">Bekräfta din e-postadress</MudText>
+                            </div>
+                        </div>
+                        <MudText Class="step-lead">Ange den sexsiffriga koden från mejlet. I demonstrationen använder du <strong>123456</strong>.</MudText>
+                        <div class="field-block code-block">
+                            <MudTextField Class="signup-field" @bind-Value="ConfirmationCode" Label="Bekräftelsekod" Placeholder="000000" Variant="Variant.Outlined" Immediate="true" MaxLength="6" Disabled="@IsBusy" />
+                        </div>
+                        <div class="resend-row">
+                            <span>Hittar du inte mejlet?</span>
+                            <MudButton Class="resend-button" Variant="Variant.Text" OnClick="ResendCodeAsync" Disabled="@IsBusy">Skicka koden igen</MudButton>
+                        </div>
+                        <div class="signup-actions">
+                            <MudButton Class="signup-back" Variant="Variant.Text" OnClick="Back" Disabled="@IsBusy" StartIcon="@Icons.Material.Filled.ArrowBack">Tillbaka</MudButton>
+                            <MudButton Class="signup-primary" Variant="Variant.Filled" OnClick="VerifyCodeAsync" Disabled="@IsBusy" EndIcon="@Icons.Material.Filled.ArrowForward">
+                                @(IsBusy ? "Verifierar…" : "Bekräfta och fortsätt")
+                            </MudButton>
+                        </div>
+                    </div>
+                    break;
+
+                case 4:
+                    <div class="signup-step">
+                        <div class="step-heading">
+                            <span class="step-symbol peach-symbol" aria-hidden="true">✦</span>
+                            <div>
+                                <p class="step-overline">Nästan klart</p>
+                                <MudText Typo="Typo.h4">Vem skapar kontot?</MudText>
+                            </div>
+                        </div>
+                        <MudText Class="step-lead">Fyll i ditt namn. När du fortsätter skickas all insamlad information till det simulerade API:t.</MudText>
+                        <div class="signup-summary" aria-label="Registreringsuppgifter">
+                            <span><small>Organisation</small><strong>@OrganisationName</strong></span>
+                            <span><small>E-post</small><strong>@Email</strong></span>
+                        </div>
+                        <div class="name-grid">
+                            <MudTextField Class="signup-field" @bind-Value="FirstName" Label="Förnamn" Variant="Variant.Outlined" Immediate="true" Disabled="@IsBusy" />
+                            <MudTextField Class="signup-field" @bind-Value="LastName" Label="Efternamn" Variant="Variant.Outlined" Immediate="true" Disabled="@IsBusy" />
+                        </div>
+                        <div class="signup-actions">
+                            <MudButton Class="signup-back" Variant="Variant.Text" OnClick="Back" Disabled="@IsBusy" StartIcon="@Icons.Material.Filled.ArrowBack">Tillbaka</MudButton>
+                            <MudButton Class="signup-primary" Variant="Variant.Filled" OnClick="CreateAccountAsync" Disabled="@IsBusy" EndIcon="@Icons.Material.Filled.ArrowForward">
+                                @(IsBusy ? "Skapar konto…" : "Skapa konto")
+                            </MudButton>
+                        </div>
+                    </div>
+                    break;
+
+                default:
+                    <div class="signup-step signup-complete">
+                        <div class="complete-icon" aria-hidden="true">✓</div>
+                        <p class="step-overline">Välkommen till socco</p>
+                        <MudText Typo="Typo.h4">Er gemensamma plats är klar.</MudText>
+                        <MudText Class="step-lead"><strong>@OrganisationName</strong> är redo och administreras av @FirstName @LastName.</MudText>
+                        <MudButton Class="signup-primary" Variant="Variant.Filled" Href="/login" EndIcon="@Icons.Material.Filled.NorthEast">Gå till inloggning</MudButton>
+
+                        <div class="invite-box">
+                            <div class="invite-heading">
+                                <span aria-hidden="true">＋</span>
+                                <div><strong>Bjud in en medlem</strong><small>Fortsätt bygga gruppen direkt.</small></div>
+                            </div>
+                            <div class="invite-grid">
+                                <MudTextField Class="signup-field" @bind-Value="InviteEmail" Label="E-postadress" InputType="InputType.Email" Variant="Variant.Outlined" />
+                                <MudTextField Class="signup-field" @bind-Value="InviteFirstName" Label="Förnamn" Variant="Variant.Outlined" />
+                                <MudTextField Class="signup-field" @bind-Value="InviteLastName" Label="Efternamn" Variant="Variant.Outlined" />
+                            </div>
+                            <MudButton Class="invite-button" Variant="Variant.Outlined" OnClick="InviteMemberAsync" Disabled="@IsBusy" EndIcon="@Icons.Material.Filled.Send">
+                                @(IsBusy ? "Skickar inbjudan…" : "Skicka inbjudan")
+                            </MudButton>
+                        </div>
+
+                        @if (InvitedMembers.Count > 0)
+                        {
+                            <ul class="invite-list">
+                                @foreach (var member in InvitedMembers)
+                                {
+                                    <li><span>@member.FirstName @member.LastName</span><small>@member.Email</small><strong>Skickad</strong></li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                    break;
             }
         </div>
-
-        @if (!string.IsNullOrWhiteSpace(StatusMessage))
-        {
-            <MudAlert Severity="@StatusSeverity" Variant="Variant.Outlined" Dense="true" Class="signup-alert">@StatusMessage</MudAlert>
-        }
-
-        @switch (CurrentStep)
-        {
-            case 1:
-                <div class="signup-step">
-                    <MudText Typo="Typo.h4">Vad heter organisationen?</MudText>
-                    <MudText>Namnet används för er arbetsyta och måste vara ledigt.</MudText>
-                    <MudTextField @bind-Value="OrganisationName" Label="Organisationens namn" Variant="Variant.Outlined" Immediate="true" Disabled="@IsBusy" />
-                    <MudButton Class="signup-primary" Variant="Variant.Filled" Disabled="@IsBusy" OnClick="CheckOrganisationAsync">
-                        @(IsBusy ? "Kontrollerar…" : "Kontrollera och fortsätt")
-                    </MudButton>
-                </div>
-                break;
-
-            case 2:
-                <div class="signup-step">
-                    <MudText Typo="Typo.h4">Vilken e-postadress ska vi använda?</MudText>
-                    <MudText>Vi skickar en bekräftelsekod till adressen. Det simulerade API-anropet innehåller organisationens namn och e-postadressen.</MudText>
-                    <MudTextField @bind-Value="Email" Label="E-postadress" InputType="InputType.Email" Variant="Variant.Outlined" Immediate="true" Disabled="@IsBusy" />
-                    <div class="signup-actions">
-                        <MudButton Variant="Variant.Text" OnClick="Back" Disabled="@IsBusy">Tillbaka</MudButton>
-                        <MudButton Class="signup-primary" Variant="Variant.Filled" Disabled="@IsBusy" OnClick="SendCodeAsync">
-                            @(IsBusy ? "Skickar…" : "Skicka kod")
-                        </MudButton>
-                    </div>
-                </div>
-                break;
-
-            case 3:
-                <div class="signup-step">
-                    <MudText Typo="Typo.h4">Bekräfta din e-postadress</MudText>
-                    <MudText>Ange den sexsiffriga koden. I demon är koden <strong>123456</strong>.</MudText>
-                    <MudTextField @bind-Value="ConfirmationCode" Label="Bekräftelsekod" Variant="Variant.Outlined" Immediate="true" MaxLength="6" Disabled="@IsBusy" />
-                    <div class="signup-actions signup-actions-wrap">
-                        <MudButton Variant="Variant.Text" OnClick="Back" Disabled="@IsBusy">Tillbaka</MudButton>
-                        <MudButton Variant="Variant.Text" OnClick="ResendCodeAsync" Disabled="@IsBusy">Skicka koden igen</MudButton>
-                        <MudButton Class="signup-primary" Variant="Variant.Filled" OnClick="VerifyCodeAsync" Disabled="@IsBusy">
-                            @(IsBusy ? "Verifierar…" : "Bekräfta")
-                        </MudButton>
-                    </div>
-                </div>
-                break;
-
-            case 4:
-                <div class="signup-step">
-                    <MudText Typo="Typo.h4">Vem skapar kontot?</MudText>
-                    <MudText>Fyll i ditt för- och efternamn. När du fortsätter skickas all insamlad information till det simulerade API:t.</MudText>
-                    <div class="name-grid">
-                        <MudTextField @bind-Value="FirstName" Label="Förnamn" Variant="Variant.Outlined" Immediate="true" Disabled="@IsBusy" />
-                        <MudTextField @bind-Value="LastName" Label="Efternamn" Variant="Variant.Outlined" Immediate="true" Disabled="@IsBusy" />
-                    </div>
-                    <div class="signup-actions">
-                        <MudButton Variant="Variant.Text" OnClick="Back" Disabled="@IsBusy">Tillbaka</MudButton>
-                        <MudButton Class="signup-primary" Variant="Variant.Filled" OnClick="CreateAccountAsync" Disabled="@IsBusy">
-                            @(IsBusy ? "Skapar konto…" : "Skapa konto")
-                        </MudButton>
-                    </div>
-                </div>
-                break;
-
-            default:
-                <div class="signup-step signup-complete">
-                    <div class="complete-icon" aria-hidden="true">✓</div>
-                    <MudText Typo="Typo.h4">Klart! Er Socco-plats är skapad.</MudText>
-                    <MudText><strong>@OrganisationName</strong> är redo och administreras av @FirstName @LastName.</MudText>
-                    <MudButton Class="signup-primary" Variant="Variant.Filled" Href="/login">Gå till inloggning</MudButton>
-                    <MudDivider />
-                    <MudText Typo="Typo.h6">Bjud in medlemmar direkt</MudText>
-                    <div class="invite-grid">
-                        <MudTextField @bind-Value="InviteEmail" Label="E-postadress" InputType="InputType.Email" Variant="Variant.Outlined" />
-                        <MudTextField @bind-Value="InviteFirstName" Label="Förnamn" Variant="Variant.Outlined" />
-                        <MudTextField @bind-Value="InviteLastName" Label="Efternamn" Variant="Variant.Outlined" />
-                    </div>
-                    <MudButton Variant="Variant.Outlined" OnClick="InviteMemberAsync" Disabled="@IsBusy">
-                        @(IsBusy ? "Skickar inbjudan…" : "Skicka inbjudan")
-                    </MudButton>
-                    @if (InvitedMembers.Count > 0)
-                    {
-                        <ul class="invite-list">
-                            @foreach (var member in InvitedMembers)
-                            {
-                                <li><span>@member.FirstName @member.LastName</span><small>@member.Email</small><strong>Skickad</strong></li>
-                            }
-                        </ul>
-                    }
-                </div>
-                break;
-        }
     </MudPaper>
 </section>
 
 @code {
+    private static readonly string[] StepLabels = ["Organisation", "E-post", "Kod", "Dina uppgifter", "Klart"];
+    private static readonly string[] StepTitles = ["Börja med grunden", "Koppla din adress", "Bekräfta att det är du", "Presentera dig", "Samla gruppen"];
+    private static readonly string[] StepDescriptions = [
+        "Ge arbetsytan ett namn som känns självklart för alla.",
+        "Välj adressen som ska administrera er nya plats.",
+        "En kort kod håller registreringen trygg och enkel.",
+        "Berätta vem som tar det första steget tillsammans med gruppen.",
+        "Kontot är klart. Logga in eller bjud in den första medlemmen."
+    ];
+    private static readonly string[] StepTones = ["rail-mustard", "rail-lavender", "rail-coral", "rail-peach", "rail-success"];
+
     private readonly List<InvitedMember> InvitedMembers = [];
     private int CurrentStep { get; set; } = 1;
     private bool IsBusy { get; set; }
