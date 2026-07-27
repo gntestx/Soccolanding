@@ -7,7 +7,9 @@
 
 <main>
     <MudAppBar Class="site-header" Elevation="0" Color="Color.Transparent">
-        <MudLink Class="wordmark" Href="#top" Underline="Underline.None">socco</MudLink>
+        <MudLink Href="#top" Underline="Underline.None" AriaLabel="Socco – gå till sidans början">
+            <img src="socco-logo.webp" alt="Socco" width="150" height="40" style="display:block;width:150px;height:auto" />
+        </MudLink>
         <MudSpacer />
         <nav aria-label="Huvudmeny">
             <MudLink Href="#funktioner" Underline="Underline.None">Funktioner</MudLink>
@@ -93,7 +95,13 @@
         <h2>Skapa mer tillsammans.</h2><MudText>Börja samla människor, idéer och nästa steg i socco.</MudText>
         <MudButton Class="button button-peach" Href="mailto:hej@socco.se" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.NorthEast">Kontakta oss</MudButton>
     </section>
-    <footer><MudLink Class="wordmark" Href="#top" Underline="Underline.None">socco</MudLink><p>Socialt samarbete, gjort enklare.</p><p>© 2026 socco</p></footer>
+    <footer>
+        <MudLink Href="#top" Underline="Underline.None" AriaLabel="Socco – gå till sidans början">
+            <img src="socco-logo.webp" alt="Socco" width="120" height="32" style="display:block;width:120px;height:auto" />
+        </MudLink>
+        <p>Socialt samarbete, gjort enklare.</p>
+        <p>© 2026 socco</p>
+    </footer>
 </main>
 
 @code {
