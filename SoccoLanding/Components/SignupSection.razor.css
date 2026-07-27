@@ -1,0 +1,175 @@
+.signup-section {
+  display: grid;
+  grid-template-columns: minmax(0, .8fr) minmax(480px, 1.2fr);
+  gap: 80px;
+  align-items: start;
+  padding: 120px max(32px, calc((100vw - 1320px) / 2));
+  background: var(--cream);
+}
+
+.signup-intro {
+  position: sticky;
+  top: 48px;
+}
+
+.signup-intro h2 {
+  color: var(--forest);
+  font-size: clamp(3rem, 5vw, 5.3rem);
+}
+
+.signup-intro > p:last-child {
+  max-width: 520px;
+  margin-top: 28px;
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+.signup-card {
+  min-height: 560px;
+  border: 1px solid color-mix(in srgb, var(--forest) 14%, transparent);
+  border-radius: 30px;
+  padding: clamp(28px, 5vw, 54px);
+  background: var(--paper);
+  box-shadow: 0 24px 70px #172c2614;
+}
+
+.signup-progress {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-bottom: 38px;
+}
+
+.signup-progress span {
+  display: grid;
+  height: 36px;
+  place-items: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--forest) 9%, transparent);
+  color: var(--muted);
+  font-size: .78rem;
+  font-weight: 900;
+}
+
+.signup-progress span.active {
+  background: var(--forest);
+  color: var(--cream);
+}
+
+.signup-alert {
+  margin-bottom: 24px;
+}
+
+.signup-step {
+  display: grid;
+  gap: 24px;
+}
+
+.signup-step h4 {
+  color: var(--forest);
+  font-family: var(--mud-typography-h1-family);
+  font-size: clamp(2rem, 4vw, 3.3rem);
+  font-weight: 500;
+  line-height: 1.05;
+}
+
+.signup-step > p {
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.signup-primary {
+  justify-self: start;
+  border-radius: 999px;
+  padding-inline: 28px;
+  background: var(--forest) !important;
+  color: #fff !important;
+  font-weight: 800;
+}
+
+.signup-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.signup-actions-wrap {
+  flex-wrap: wrap;
+}
+
+.name-grid,
+.invite-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.invite-grid > :first-child {
+  grid-column: 1 / -1;
+}
+
+.signup-complete {
+  text-align: center;
+}
+
+.signup-complete .signup-primary,
+.signup-complete > button {
+  justify-self: center;
+}
+
+.complete-icon {
+  display: grid;
+  width: 72px;
+  height: 72px;
+  place-items: center;
+  justify-self: center;
+  border-radius: 50%;
+  background: var(--forest);
+  color: var(--cream);
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+@media (max-width: 960px) {
+  .signup-section {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .signup-intro {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .signup-section {
+    padding: 82px 22px;
+  }
+
+  .signup-card {
+    min-height: 0;
+    border-radius: 22px;
+    padding: 24px 18px;
+  }
+
+  .name-grid,
+  .invite-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .invite-grid > :first-child {
+    grid-column: auto;
+  }
+
+  .signup-actions {
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+
+  .signup-actions .signup-primary,
+  .signup-actions button {
+    width: 100%;
+  }
+}
