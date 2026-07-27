@@ -1,0 +1,100 @@
+/* Compact the signup introduction when the form stacks vertically. */
+@media (max-width: 900px) {
+  .signup-card {
+    min-height: 0 !important;
+  }
+
+  .signup-rail {
+    display: block !important;
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 24px 30px 26px !important;
+  }
+
+  .signup-rail-copy {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) !important;
+    align-items: center !important;
+    column-gap: 24px !important;
+  }
+
+  .rail-kicker {
+    grid-column: 1 / -1 !important;
+    margin: 0 0 12px !important;
+  }
+
+  .rail-number {
+    position: static !important;
+    grid-column: 1 !important;
+    grid-row: 2 / span 2 !important;
+    margin: 0 !important;
+    font-size: clamp(4rem, 10vw, 5.5rem) !important;
+    opacity: 1 !important;
+  }
+
+  .signup-rail h3 {
+    grid-column: 2 !important;
+    margin: 0 !important;
+    max-width: none !important;
+    font-size: clamp(1.8rem, 5vw, 2.5rem) !important;
+  }
+
+  .signup-rail-copy > p:last-child {
+    grid-column: 2 !important;
+    margin: 8px 0 0 !important;
+    max-width: 540px !important;
+  }
+
+  .rail-art {
+    position: absolute !important;
+    right: -54px !important;
+    bottom: -64px !important;
+    width: 150px !important;
+    height: 150px !important;
+    margin: 0 !important;
+    opacity: .34 !important;
+  }
+
+  .rail-art span:first-child { inset: 0 !important; }
+  .rail-art span:nth-child(2) { inset: 28px !important; }
+  .rail-art span:nth-child(3) { inset: 55px !important; }
+  .rail-art b {
+    top: 55px !important;
+    left: 58px !important;
+    font-size: 1.6rem !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .signup-rail {
+    padding: 21px 20px 23px !important;
+  }
+
+  .signup-rail-copy {
+    column-gap: 16px !important;
+  }
+
+  .rail-kicker {
+    margin-bottom: 8px !important;
+  }
+
+  .rail-number {
+    font-size: 3.7rem !important;
+  }
+
+  .signup-rail h3 {
+    font-size: 1.75rem !important;
+  }
+
+  .signup-rail-copy > p:last-child {
+    display: none !important;
+  }
+
+  .rail-art {
+    width: 112px !important;
+    height: 112px !important;
+    right: -42px !important;
+    bottom: -48px !important;
+  }
+}
