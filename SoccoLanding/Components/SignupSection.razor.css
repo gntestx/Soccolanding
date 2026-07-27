@@ -132,6 +132,41 @@
   font-weight: 900;
 }
 
+.invite-list {
+  display: grid;
+  gap: 10px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+.invite-list li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 3px 16px;
+  border-radius: 14px;
+  padding: 14px 16px;
+  background: color-mix(in srgb, var(--forest) 7%, transparent);
+}
+
+.invite-list span {
+  font-weight: 800;
+}
+
+.invite-list small {
+  color: var(--muted);
+}
+
+.invite-list strong {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  color: var(--forest);
+  font-size: .75rem;
+  text-transform: uppercase;
+}
+
 @media (max-width: 960px) {
   .signup-section {
     grid-template-columns: 1fr;
