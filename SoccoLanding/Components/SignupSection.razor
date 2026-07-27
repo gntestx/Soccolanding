@@ -1,0 +1,215 @@
+@using System.ComponentModel.DataAnnotations
+
+<section class="signup-section" id="signup">
+    <div class="signup-intro">
+        <p class="eyebrow"><span class="eyebrow-dot"></span>Kom igång med socco</p>
+        <h2>Skapa er gemensamma plats.</h2>
+        <p>Vi guidar dig genom några korta steg. Formuläret använder simulerade API-anrop och skickar inga riktiga mejl.</p>
+    </div>
+
+    <MudPaper Class="signup-card" Elevation="0">
+        <div class="signup-progress" aria-label="Registreringsförlopp">
+            @for (var number = 1; number <= 5; number++)
+            {
+                <span class="@(number <= CurrentStep ? "active" : null)">@number</span>
+            }
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(StatusMessage))
+        {
+            <MudAlert Severity="@StatusSeverity" Variant="Variant.Outlined" Dense="true" Class="signup-alert">@StatusMessage</MudAlert>
+        }
+
+        @switch (CurrentStep)
+        {
+            case 1:
+                <div class="signup-step">
+                    <MudText Typo="Typo.h4">Vad heter organisationen?</MudText>
+                    <MudText>Namnet används för er arbetsyta och måste vara ledigt.</MudText>
+                    <MudTextField @bind-Value="OrganisationName" Label="Organisationens namn" Variant="Variant.Outlined" Immediate="true" Disabled="@IsBusy" />
+                    <MudButton Class="signup-primary" Variant="Variant.Filled" Disabled="@IsBusy" OnClick="CheckOrganisationAsync">
+                        @(IsBusy ? "Kontrollerar…" : "Kontrollera och fortsätt")
+                    </MudButton>
+                </div>
+                break;
+
+            case 2:
+                <div class="signup-step">
+                    <MudText Typo="Typo.h4">Vilken e-postadress ska vi använda?</MudText>
+                    <MudText>Vi skickar en bekräftelsekod till adressen. Det simulerade API-anropet innehåller organisationens namn och e-postadressen.</MudText>
+                    <MudTextField @bind-Value="Email" Label="E-postadress" InputType="InputType.Email" Variant="Variant.Outlined" Immediate="true" Disabled="@IsBusy" />
+                    <div class="signup-actions">
+                        <MudButton Variant="Variant.Text" OnClick="Back" Disabled="@IsBusy">Tillbaka</MudButton>
+                        <MudButton Class="signup-primary" Variant="Variant.Filled" Disabled="@IsBusy" OnClick="SendCodeAsync">
+                            @(IsBusy ? "Skickar…" : "Skicka kod")
+                        </MudButton>
+                    </div>
+                </div>
+                break;
+
+            case 3:
+                <div class="signup-step">
+                    <MudText Typo="Typo.h4">Bekräfta din e-postadress</MudText>
+                    <MudText>Ange den sexsiffriga koden. I demon är koden <strong>123456</strong>.</MudText>
+                    <MudTextField @bind-Value="ConfirmationCode" Label="Bekräftelsekod" Variant="Variant.Outlined" Immediate="true" MaxLength="6" Disabled="@IsBusy" />
+                    <div class="signup-actions signup-actions-wrap">
+                        <MudButton Variant="Variant.Text" OnClick="Back" Disabled="@IsBusy">Tillbaka</MudButton>
+                        <MudButton Variant="Variant.Text" OnClick="ResendCodeAsync" Disabled="@IsBusy">Skicka koden igen</MudButton>
+                        <MudButton Class="signup-primary" Variant="Variant.Filled" OnClick="VerifyCodeAsync" Disabled="@IsBusy">
+                            @(IsBusy ? "Verifierar…" : "Bekräfta")
+                        </MudButton>
+                    </div>
+                </div>
+                break;
+
+            case 4:
+                <div class="signup-step">
+                    <MudText Typo="Typo.h4">Vem skapar kontot?</MudText>
+                    <MudText>Fyll i ditt för- och efternamn. När du fortsätter skickas all insamlad information till det simulerade API:t.</MudText>
+                    <div class="name-grid">
+                        <MudTextField @bind-Value="FirstName" Label="Förnamn" Variant="Variant.Outlined" Immediate="true" Disabled="@IsBusy" />
+                        <MudTextField @bind-Value="LastName" Label="Efternamn" Variant="Variant.Outlined" Immediate="true" Disabled="@IsBusy" />
+                    </div>
+                    <div class="signup-actions">
+                        <MudButton Variant="Variant.Text" OnClick="Back" Disabled="@IsBusy">Tillbaka</MudButton>
+                        <MudButton Class="signup-primary" Variant="Variant.Filled" OnClick="CreateAccountAsync" Disabled="@IsBusy">
+                            @(IsBusy ? "Skapar konto…" : "Skapa konto")
+                        </MudButton>
+                    </div>
+                </div>
+                break;
+
+            default:
+                <div class="signup-step signup-complete">
+                    <div class="complete-icon" aria-hidden="true">✓</div>
+                    <MudText Typo="Typo.h4">Klart! Er Socco-plats är skapad.</MudText>
+                    <MudText><strong>@OrganisationName</strong> är redo och administreras av @FirstName @LastName.</MudText>
+                    <MudButton Class="signup-primary" Variant="Variant.Filled" Href="/login">Gå till inloggning</MudButton>
+                    <MudDivider />
+                    <MudText Typo="Typo.h6">Bjud in en medlem direkt</MudText>
+                    <div class="invite-grid">
+                        <MudTextField @bind-Value="InviteEmail" Label="E-postadress" InputType="InputType.Email" Variant="Variant.Outlined" />
+                        <MudTextField @bind-Value="InviteFirstName" Label="Förnamn" Variant="Variant.Outlined" />
+                        <MudTextField @bind-Value="InviteLastName" Label="Efternamn" Variant="Variant.Outlined" />
+                    </div>
+                    <MudButton Variant="Variant.Outlined" OnClick="InviteMemberAsync" Disabled="@IsBusy">
+                        @(IsBusy ? "Skickar inbjudan…" : "Skicka inbjudan")
+                    </MudButton>
+                </div>
+                break;
+        }
+    </MudPaper>
+</section>
+
+@code {
+    private int CurrentStep { get; set; } = 1;
+    private bool IsBusy { get; set; }
+    private string OrganisationName { get; set; } = string.Empty;
+    private string Email { get; set; } = string.Empty;
+    private string ConfirmationCode { get; set; } = string.Empty;
+    private string FirstName { get; set; } = string.Empty;
+    private string LastName { get; set; } = string.Empty;
+    private string InviteEmail { get; set; } = string.Empty;
+    private string InviteFirstName { get; set; } = string.Empty;
+    private string InviteLastName { get; set; } = string.Empty;
+    private string? StatusMessage { get; set; }
+    private Severity StatusSeverity { get; set; } = Severity.Info;
+
+    private async Task CheckOrganisationAsync()
+    {
+        ClearStatus();
+        if (string.IsNullOrWhiteSpace(OrganisationName))
+        {
+            SetError("Ange organisationens namn.");
+            return;
+        }
+
+        await SimulateApiAsync();
+        if (OrganisationName.Contains("socco", StringComparison.OrdinalIgnoreCase) || OrganisationName.Contains("upptagen", StringComparison.OrdinalIgnoreCase))
+        {
+            SetError("Namnet verkar redan vara upptaget. Prova ett annat organisationsnamn.");
+            return;
+        }
+
+        CurrentStep = 2;
+    }
+
+    private async Task SendCodeAsync()
+    {
+        ClearStatus();
+        if (!new EmailAddressAttribute().IsValid(Email))
+        {
+            SetError("Ange en giltig e-postadress.");
+            return;
+        }
+
+        await SimulateApiAsync();
+        CurrentStep = 3;
+        SetSuccess($"En bekräftelsekod har skickats till {Email} för {OrganisationName}.");
+    }
+
+    private async Task ResendCodeAsync()
+    {
+        ClearStatus();
+        await SimulateApiAsync();
+        SetSuccess("En ny bekräftelsekod har skickats.");
+    }
+
+    private async Task VerifyCodeAsync()
+    {
+        ClearStatus();
+        await SimulateApiAsync();
+        if (ConfirmationCode != "123456")
+        {
+            SetError("Koden stämmer inte. Använd 123456 i demon.");
+            return;
+        }
+
+        CurrentStep = 4;
+    }
+
+    private async Task CreateAccountAsync()
+    {
+        ClearStatus();
+        if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName))
+        {
+            SetError("Ange både förnamn och efternamn.");
+            return;
+        }
+
+        await SimulateApiAsync();
+        CurrentStep = 5;
+        SetSuccess("Kontot skapades av demo-API:t.");
+    }
+
+    private async Task InviteMemberAsync()
+    {
+        ClearStatus();
+        if (!new EmailAddressAttribute().IsValid(InviteEmail) || string.IsNullOrWhiteSpace(InviteFirstName) || string.IsNullOrWhiteSpace(InviteLastName))
+        {
+            SetError("Fyll i giltig e-postadress, förnamn och efternamn.");
+            return;
+        }
+
+        await SimulateApiAsync();
+        SetSuccess($"En inbjudan har skickats till {InviteFirstName} {InviteLastName}.");
+        InviteEmail = InviteFirstName = InviteLastName = string.Empty;
+    }
+
+    private async Task SimulateApiAsync()
+    {
+        IsBusy = true;
+        await Task.Delay(650);
+        IsBusy = false;
+    }
+
+    private void Back()
+    {
+        ClearStatus();
+        CurrentStep = Math.Max(1, CurrentStep - 1);
+    }
+
+    private void ClearStatus() => StatusMessage = null;
+    private void SetError(string message) { StatusMessage = message; StatusSeverity = Severity.Error; }
+    private void SetSuccess(string message) { StatusMessage = message; StatusSeverity = Severity.Success; }
+}
