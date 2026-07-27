@@ -1,9 +1,9 @@
 @using System.ComponentModel.DataAnnotations
 
-<section class="signup-section" id="signup">
+<section class="signup-section" id="signup" aria-labelledby="signup-title">
     <div class="signup-intro">
         <p class="eyebrow"><span class="eyebrow-dot"></span>Kom igång med socco</p>
-        <h2>Skapa er gemensamma plats.</h2>
+        <h2 id="signup-title">Skapa er gemensamma plats.</h2>
         <p>Vi guidar dig genom några korta steg. Formuläret använder simulerade API-anrop och skickar inga riktiga mejl.</p>
     </div>
 
@@ -86,7 +86,7 @@
                     <MudText><strong>@OrganisationName</strong> är redo och administreras av @FirstName @LastName.</MudText>
                     <MudButton Class="signup-primary" Variant="Variant.Filled" Href="/login">Gå till inloggning</MudButton>
                     <MudDivider />
-                    <MudText Typo="Typo.h6">Bjud in en medlem direkt</MudText>
+                    <MudText Typo="Typo.h6">Bjud in medlemmar direkt</MudText>
                     <div class="invite-grid">
                         <MudTextField @bind-Value="InviteEmail" Label="E-postadress" InputType="InputType.Email" Variant="Variant.Outlined" />
                         <MudTextField @bind-Value="InviteFirstName" Label="Förnamn" Variant="Variant.Outlined" />
@@ -95,6 +95,15 @@
                     <MudButton Variant="Variant.Outlined" OnClick="InviteMemberAsync" Disabled="@IsBusy">
                         @(IsBusy ? "Skickar inbjudan…" : "Skicka inbjudan")
                     </MudButton>
+                    @if (InvitedMembers.Count > 0)
+                    {
+                        <ul class="invite-list">
+                            @foreach (var member in InvitedMembers)
+                            {
+                                <li><span>@member.FirstName @member.LastName</span><small>@member.Email</small><strong>Skickad</strong></li>
+                            }
+                        </ul>
+                    }
                 </div>
                 break;
         }
@@ -102,6 +111,7 @@
 </section>
 
 @code {
+    private readonly List<InvitedMember> InvitedMembers = [];
     private int CurrentStep { get; set; } = 1;
     private bool IsBusy { get; set; }
     private string OrganisationName { get; set; } = string.Empty;
@@ -118,19 +128,21 @@
     private async Task CheckOrganisationAsync()
     {
         ClearStatus();
-        if (string.IsNullOrWhiteSpace(OrganisationName))
+        if (string.IsNullOrWhiteSpace(OrganisationName) || OrganisationName.Trim().Length < 3)
         {
-            SetError("Ange organisationens namn.");
+            SetError("Ange ett organisationsnamn med minst tre tecken.");
             return;
         }
 
         await SimulateApiAsync();
-        if (OrganisationName.Contains("socco", StringComparison.OrdinalIgnoreCase) || OrganisationName.Contains("upptagen", StringComparison.OrdinalIgnoreCase))
+        var unavailableNames = new[] { "socco", "demo", "test", "exempel" };
+        if (unavailableNames.Contains(OrganisationName.Trim(), StringComparer.OrdinalIgnoreCase))
         {
             SetError("Namnet verkar redan vara upptaget. Prova ett annat organisationsnamn.");
             return;
         }
 
+        OrganisationName = OrganisationName.Trim();
         CurrentStep = 2;
     }
 
@@ -144,6 +156,7 @@
         }
 
         await SimulateApiAsync();
+        Email = Email.Trim();
         CurrentStep = 3;
         SetSuccess($"En bekräftelsekod har skickats till {Email} för {OrganisationName}.");
     }
@@ -159,7 +172,7 @@
     {
         ClearStatus();
         await SimulateApiAsync();
-        if (ConfirmationCode != "123456")
+        if (ConfirmationCode.Trim() != "123456")
         {
             SetError("Koden stämmer inte. Använd 123456 i demon.");
             return;
@@ -178,6 +191,8 @@
         }
 
         await SimulateApiAsync();
+        FirstName = FirstName.Trim();
+        LastName = LastName.Trim();
         CurrentStep = 5;
         SetSuccess("Kontot skapades av demo-API:t.");
     }
@@ -192,7 +207,8 @@
         }
 
         await SimulateApiAsync();
-        SetSuccess($"En inbjudan har skickats till {InviteFirstName} {InviteLastName}.");
+        InvitedMembers.Add(new(InviteEmail.Trim(), InviteFirstName.Trim(), InviteLastName.Trim()));
+        SetSuccess($"En inbjudan har skickats till {InviteFirstName.Trim()} {InviteLastName.Trim()}.");
         InviteEmail = InviteFirstName = InviteLastName = string.Empty;
     }
 
@@ -212,4 +228,6 @@
     private void ClearStatus() => StatusMessage = null;
     private void SetError(string message) { StatusMessage = message; StatusSeverity = Severity.Error; }
     private void SetSuccess(string message) { StatusMessage = message; StatusSeverity = Severity.Success; }
+
+    private sealed record InvitedMember(string Email, string FirstName, string LastName);
 }
