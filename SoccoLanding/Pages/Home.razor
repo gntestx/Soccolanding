@@ -1,4 +1,5 @@
 @page "/"
+@using SoccoLanding.Components
 
 <PageTitle>socco – samarbete som faktiskt känns enkelt</PageTitle>
 <HeadContent>
@@ -14,10 +15,10 @@
         <nav aria-label="Huvudmeny">
             <MudLink Href="#funktioner" Underline="Underline.None">Funktioner</MudLink>
             <MudLink Href="#sa-fungerar-det" Underline="Underline.None">Så fungerar det</MudLink>
-            <MudLink Href="#om" Underline="Underline.None">Om socco</MudLink>
+            <MudLink Href="#signup" Underline="Underline.None">Skapa konto</MudLink>
         </nav>
         <MudSpacer />
-        <MudButton Class="header-cta" Href="#kontakt" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.NorthEast">Prova socco</MudButton>
+        <MudButton Class="header-cta" Href="#signup" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.NorthEast">Prova socco</MudButton>
     </MudAppBar>
 
     <section class="hero" id="top">
@@ -26,7 +27,7 @@
             <h1>Samarbete som<br />faktiskt känns <em>enkelt.</em></h1>
             <MudText Class="hero-lead">Samla människor, idéer och nästa steg på en plats – så att fler kan bidra och mindre faller mellan stolarna.</MudText>
             <MudStack Class="hero-actions" Row="true" AlignItems="AlignItems.Center">
-                <MudButton Class="button button-primary" Href="#kontakt" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.NorthEast">Kom igång</MudButton>
+                <MudButton Class="button button-primary" Href="#signup" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.NorthEast">Kom igång</MudButton>
                 <MudButton Class="text-link" Href="#sa-fungerar-det" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.South">Se hur det fungerar</MudButton>
             </MudStack>
             <div class="trust-row" aria-label="Fördelar"><span>Ingen installation</span><span>Kom igång på minuter</span></div>
@@ -70,7 +71,7 @@
             <p class="eyebrow light"><span class="eyebrow-dot"></span>Så fungerar det</p>
             <h2>En lugnare väg från tanke till handling.</h2>
             <p>Socco ger gruppen ett gemensamt rum där det är lätt att förstå sammanhanget och ta ansvar för nästa steg.</p>
-            <MudButton Class="button button-peach" Href="#kontakt" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.NorthEast">Upptäck socco</MudButton>
+            <MudButton Class="button button-peach" Href="#signup" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.NorthEast">Upptäck socco</MudButton>
         </div>
         <MudList T="Step" Class="steps-list">
             @foreach (var step in Steps)
@@ -90,10 +91,12 @@
         <div><p class="eyebrow"><span class="eyebrow-dot"></span>Om socco</p><h2>Teknik ska ge plats åt människor – inte stå i vägen.</h2><MudText>Därför är socco byggt kring tydlighet, delaktighet och omtanke. En samarbetsyta som känns mänsklig, även när arbetet är komplext.</MudText></div>
     </section>
 
+    <SignupSection />
+
     <section class="final-cta" id="kontakt">
         <p class="eyebrow light"><span class="eyebrow-dot"></span>Redo när ni är</p>
         <h2>Skapa mer tillsammans.</h2><MudText>Börja samla människor, idéer och nästa steg i socco.</MudText>
-        <MudButton Class="button button-peach" Href="mailto:hej@socco.se" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.NorthEast">Kontakta oss</MudButton>
+        <MudButton Class="button button-peach" Href="#signup" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.NorthEast">Skapa konto</MudButton>
     </section>
     <footer>
         <MudLink Href="#top" Underline="Underline.None" AriaLabel="Socco – gå till sidans början">
