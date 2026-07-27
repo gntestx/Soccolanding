@@ -5,13 +5,23 @@
         <p class="eyebrow"><span class="eyebrow-dot"></span>Kom igång med socco</p>
         <h2 id="signup-title">Skapa er gemensamma plats.</h2>
         <p>Vi guidar dig genom några korta steg. Formuläret använder simulerade API-anrop och skickar inga riktiga mejl.</p>
+
+        <div class="signup-art" aria-hidden="true">
+            <div class="signup-art-rings"><span></span><span></span><span></span></div>
+            <div class="signup-art-note note-people"><b>✦</b><span>Fler perspektiv</span></div>
+            <div class="signup-art-note note-direction"><b>↗</b><span>Gemensam riktning</span></div>
+            <div class="signup-art-center">s</div>
+        </div>
     </div>
 
     <MudPaper Class="signup-card" Elevation="0">
+        <div class="signup-card-kicker">Steg @CurrentStep av 5</div>
         <div class="signup-progress" aria-label="Registreringsförlopp">
             @for (var number = 1; number <= 5; number++)
             {
-                <span class="@(number <= CurrentStep ? "active" : null)">@number</span>
+                <span class="@(number < CurrentStep ? "complete" : number == CurrentStep ? "active" : null)">
+                    @(number < CurrentStep ? "✓" : number)
+                </span>
             }
         </div>
 
