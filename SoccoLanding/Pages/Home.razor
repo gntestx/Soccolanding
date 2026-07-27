@@ -106,6 +106,56 @@
     </footer>
 </main>
 
+<style>
+    .final-cta {
+        overflow: hidden;
+        padding-bottom: 120px;
+    }
+
+    .final-cta > .signup-section {
+        display: block;
+        max-width: 920px;
+        margin: 64px auto 0;
+        padding: 0;
+        background: transparent;
+        text-align: left;
+    }
+
+    .final-cta > .signup-section::after,
+    .final-cta .signup-intro {
+        display: none;
+    }
+
+    .final-cta .signup-card {
+        min-height: 560px;
+        border: 1px solid rgba(246, 240, 226, .18);
+        background: var(--paper);
+        box-shadow: 0 30px 90px rgba(0, 0, 0, .28);
+    }
+
+    .final-cta .signup-card::after {
+        position: absolute;
+        right: -72px;
+        bottom: -92px;
+        width: 230px;
+        height: 230px;
+        border: 34px solid color-mix(in srgb, var(--mustard) 42%, transparent);
+        border-radius: 50%;
+        content: "";
+        pointer-events: none;
+    }
+
+    @@media (max-width: 640px) {
+        .final-cta {
+            padding-bottom: 84px;
+        }
+
+        .final-cta > .signup-section {
+            margin-top: 42px;
+        }
+    }
+</style>
+
 @code {
     private static readonly Feature[] Features =
     [
