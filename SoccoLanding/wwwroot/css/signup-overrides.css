@@ -56,13 +56,37 @@
     opacity: .34 !important;
   }
 
-  .rail-art span:first-child { inset: 0 !important; }
-  .rail-art span:nth-child(2) { inset: 28px !important; }
-  .rail-art span:nth-child(3) { inset: 55px !important; }
+  .rail-art span:first-child {
+    inset: 0 !important;
+  }
+
+  .rail-art span:nth-child(2) {
+    inset: 28px !important;
+  }
+
+  .rail-art span:nth-child(3) {
+    inset: 55px !important;
+  }
+
   .rail-art b {
     top: 55px !important;
     left: 58px !important;
     font-size: 1.6rem !important;
+  }
+}
+
+/* Keep the tablet heading compact and preserve the card's rounded top edge. */
+@media (min-width: 641px) and (max-width: 900px) {
+  .signup-card {
+    border-radius: 32px !important;
+  }
+
+  .signup-rail {
+    height: 190px !important;
+    min-height: 190px !important;
+    max-height: 190px !important;
+    overflow: hidden !important;
+    border-radius: 32px 32px 0 0 !important;
   }
 }
 
