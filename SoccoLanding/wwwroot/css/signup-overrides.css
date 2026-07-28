@@ -1,14 +1,20 @@
-/* Compact the signup introduction when the form stacks vertically. */
+/* Keep the signup introduction compact whenever the card stacks vertically. */
 @media (max-width: 900px) {
   .signup-card {
     min-height: 0 !important;
+    grid-template-columns: 1fr !important;
+    overflow: hidden !important;
+    border-radius: 32px !important;
   }
 
   .signup-rail {
     display: block !important;
+    align-self: start !important;
     min-height: 0 !important;
     height: auto !important;
     max-height: none !important;
+    overflow: hidden !important;
+    border-radius: 32px 32px 0 0 !important;
     padding: 24px 30px 26px !important;
   }
 
@@ -75,23 +81,13 @@
   }
 }
 
-/* Keep the tablet heading compact and preserve the card's rounded top edge. */
-@media (min-width: 641px) and (max-width: 900px) {
-  .signup-card {
-    border-radius: 32px !important;
-  }
-
-  .signup-rail {
-    height: 190px !important;
-    min-height: 190px !important;
-    max-height: 190px !important;
-    overflow: hidden !important;
-    border-radius: 32px 32px 0 0 !important;
-  }
-}
-
 @media (max-width: 640px) {
+  .signup-card {
+    border-radius: 26px !important;
+  }
+
   .signup-rail {
+    border-radius: 26px 26px 0 0 !important;
     padding: 21px 20px 23px !important;
   }
 
@@ -116,9 +112,9 @@
   }
 
   .rail-art {
-    width: 112px !important;
-    height: 112px !important;
     right: -42px !important;
     bottom: -48px !important;
+    width: 112px !important;
+    height: 112px !important;
   }
 }
